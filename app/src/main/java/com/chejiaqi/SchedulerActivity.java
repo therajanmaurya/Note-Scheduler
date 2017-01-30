@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +47,7 @@ public class SchedulerActivity extends AppCompatActivity
 
     String fbButtonAction;
     String preNote;
-    Note note;
+    Note dbNote;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,14 +62,15 @@ public class SchedulerActivity extends AppCompatActivity
 
         //Setup initial text
         textView.setText(getSelectedDatesString());
+        textView.setMovementMethod(new ScrollingMovementMethod());
     }
 
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @Nullable CalendarDay date, boolean selected) {
         try {
-            note = mDatabaseHelper.searchNote(getSelectedDatesString());
-            textView.setText(note.getNote());
-            preNote = note.getNote();
+            dbNote = mDatabaseHelper.searchNote(getSelectedDatesString());
+            textView.setText(dbNote.getNote());
+            preNote = dbNote.getNote();
             fbButtonAction = Constant.NOTE_UPDATE;
             floatingActionButton.setImageResource(R.drawable.ic_update_white_24dp);
         } catch (NullPointerException e) {
@@ -77,6 +79,7 @@ public class SchedulerActivity extends AppCompatActivity
             preNote = "";
             floatingActionButton.setImageResource(R.drawable.ic_add_circle_white_24dp);
         }
+        textView.setMovementMethod(new ScrollingMovementMethod());
     }
 
     @Override
@@ -126,13 +129,18 @@ public class SchedulerActivity extends AppCompatActivity
                                     note.setNote(input.toString());
                                     mDatabaseHelper.addNote(note);
                                     textView.setText(input.toString());
-
+                                    fbButtonAction = Constant.NOTE_UPDATE;
+                                    dbNote = note;
+                                    preNote = input.toString();
+                                    floatingActionButton.setImageResource(R.drawable.ic_update_white_24dp);
                                 } else if(fbButtonAction.equals(Constant.NOTE_UPDATE)) {
-                                    note.setNote(input.toString());
-                                    mDatabaseHelper.addNote(note);
+                                    dbNote.setNote(input.toString());
+                                    mDatabaseHelper.updateNote(dbNote);
                                     textView.setText(input.toString());
+                                    preNote = input.toString();
                                 }
                                 Toast.makeText(SchedulerActivity.this, input, Toast.LENGTH_SHORT).show();
+                                textView.setMovementMethod(new ScrollingMovementMethod());
                             }
                         })
                 .show();
