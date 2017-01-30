@@ -10,6 +10,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * This Activity is the Home Activity
+ */
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.fab_scheduler)
@@ -23,11 +26,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        //Setting the Support Action ToolBar
         setSupportActionBar(mToolbar);
     }
 
     @OnClick(R.id.fab_scheduler)
     void onClickScheduler() {
+        //As the user click on Schedule Fab Button SchedulerActivity will be launch and
+        // give user to add and update Note
         Intent intent = new Intent(this, SchedulerActivity.class);
         startActivity(intent);
     }

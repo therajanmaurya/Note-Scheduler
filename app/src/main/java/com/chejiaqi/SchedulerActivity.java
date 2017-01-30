@@ -26,9 +26,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by Rajan Maurya on 30/01/17.
+ * This Activity is showing the Scheduler UI. In which user can view his Note and can add new one
+ * and also able to update previous note
  */
-
 public class SchedulerActivity extends AppCompatActivity
         implements OnDateSelectedListener, OnMonthChangedListener {
 
@@ -57,6 +57,7 @@ public class SchedulerActivity extends AppCompatActivity
         mDatabaseHelper = new DatabaseHelper();
         fbButtonAction = Constant.NO_ACTION;
 
+        //setting the Date Change Listener and Month Change listener
         widget.setOnDateChangedListener(this);
         widget.setOnMonthChangedListener(this);
 
@@ -65,6 +66,13 @@ public class SchedulerActivity extends AppCompatActivity
         textView.setMovementMethod(new ScrollingMovementMethod());
     }
 
+    /**
+     * This method will be called every time, whenever user will click on any date
+     *
+     * @param widget MaterialCalendarView widget;
+     * @param date Date
+     * @param selected status
+     */
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @Nullable CalendarDay date, boolean selected) {
         try {
@@ -82,12 +90,21 @@ public class SchedulerActivity extends AppCompatActivity
         textView.setMovementMethod(new ScrollingMovementMethod());
     }
 
+    /**
+     * This will be called whenever user change the month
+     * @param widget MaterialCalendarView
+     * @param date Date
+     */
     @Override
     public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
         //noinspection ConstantConditions
         getSupportActionBar().setTitle(FORMATTER.format(date.getDate()));
     }
 
+    /**
+     * This method converting the selected date in a default format like  "30 Jan 2017"
+     * @return Date String
+     */
     private String getSelectedDatesString() {
         CalendarDay date = widget.getSelectedDate();
         if (date == null) {
@@ -111,6 +128,15 @@ public class SchedulerActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * This method for showing the Material Dialog for adding the note and for updating the Note.
+     * There is two more first one is
+     * Constant.NOTE_ADD
+     *  In which new note is adding into database
+     * Constant.NOTE_UPDATE
+     * In which previous note is updating
+     * @param textPositiveButton String
+     */
     public void materialDialog(String textPositiveButton) {
         new MaterialDialog.Builder(this)
                 .title(R.string.enter_note)

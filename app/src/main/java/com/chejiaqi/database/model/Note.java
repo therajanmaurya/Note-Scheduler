@@ -10,9 +10,6 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-/**
- * Created by Rajan Maurya on 30/01/17.
- */
 @Table(database = SchedulerDatabase.class)
 @ModelContainer
 public class Note extends BaseModel implements Parcelable {
